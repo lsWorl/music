@@ -96,12 +96,19 @@ const changeProgress = (e: any) => {
   //用户禁止选中
   user-select: none;
 }
+.foot{
+  position: absolute;
+  bottom: 0px;
+  background-color: #fff;
+  width: 100%;
+}
 .progressBar {
   height: 10px;
   /* background-color: #1ecd99; */
   /* overflow: hidden; */
   display: flex;
   align-items: center;
+  
 }
 
 .progressSlider {

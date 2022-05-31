@@ -33,8 +33,7 @@ h2 {
 }
 
 nav {
-  margin-top: 16px;
-
+  margin: 10px 0px;
   ul {
     width: 33%;
     height: 28px;

@@ -37,6 +37,7 @@ declare module '@vue/runtime-core' {
     Recommend: typeof import('./src/components/Recommend.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TableList: typeof import('./src/components/TableList.vue')['default']
   }
 }
 

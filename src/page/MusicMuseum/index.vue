@@ -1,14 +1,17 @@
 <template>
   <div class="common-layout">
-    <el-scrollbar height="560px">
-      <div>
-        <h2>音乐馆</h2>
-        <!-- 导航栏 -->
-        <head-nav></head-nav>
+
+    <div>
+      <h2>音乐馆</h2>
+      <!-- 导航栏 -->
+      <head-nav></head-nav>
+      <div class="scrollBar">
+        <el-scrollbar>
         <!-- 中间部分 -->
-        <router-view></router-view>
+          <router-view></router-view>
+      </el-scrollbar>
       </div>
-    </el-scrollbar>
+    </div>
   </div>
 
 </template>
@@ -17,7 +20,7 @@
 import '../../components/LeftBar.vue';
 import '../../components/HeadBar.vue';
 import '../../components/HeadNav.vue';
-import Recommend from './Recommend.vue'
+import './Recommend.vue'
 import { provide, ref } from 'vue';
 
 //传递给导航栏数据
@@ -25,26 +28,31 @@ const nav = ref([
   {
     navName: '个性推荐',
     router: '/recommend/musicMuseum/musicMuseumRecommend',
-    show:true
+    show: true
   },
   {
     navName: '歌单',
     router: '/recommend/musicMuseum/musicMuseumList',
-    show:false
+    show: false
   },
   {
     navName: '排行榜',
     router: '/recommend/musicMuseum/rankingList',
-    show:false
+    show: false
   },
   {
     navName: '歌手',
     router: '/recommend/musicMuseum/singerList',
-    show:false
+    show: false
   },
 ])
 provide('MusicMuseumnav', nav)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+.scrollBar{
+  // background-color: aqua;
+  height: calc(80vh - 110px);
+  width: 100%;
+}
 </style>

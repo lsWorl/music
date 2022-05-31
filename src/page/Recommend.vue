@@ -29,5 +29,5 @@ import PlayControl from '../components/PlayControl.vue';
 </script>
 
 <style scoped lang="scss">
-
+html,body{height:100%;margin:0px;}
 </style>

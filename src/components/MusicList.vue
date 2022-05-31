@@ -41,12 +41,12 @@ if(musicList.value.playlists){
   ul {
 
     display: flex;
-    justify-content: space-around;
+    justify-content: flex-start;
     align-items: flex-start;
     flex-wrap: wrap;
-
+    padding: 10px;
     li {
-      margin-right: 40px;
+      margin: 0px 20px;
 
     }
 

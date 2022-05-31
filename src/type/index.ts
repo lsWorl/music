@@ -1,5 +1,6 @@
 interface IData {
-  index:number
+  index:number,
+  officialListDetailItem:any
 }
 export type {
   IData
