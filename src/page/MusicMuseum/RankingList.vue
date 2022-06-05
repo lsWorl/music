@@ -32,9 +32,9 @@ onBeforeMount(async ()=>{
 async function getAllRankings() {
   let res = await request("/toplist");
   // console.log(res);
-  officialList = res.data.list.slice(0, 4);
+  officialList = res.data.list.slice(0, 4); 
   globalList.value = res.data.list.slice(4);
-  console.log(globalList.value)
+  console.log(globalList)
   
 }
 // 根据榜单id请求详细数据

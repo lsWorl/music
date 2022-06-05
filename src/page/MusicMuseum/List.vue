@@ -2,7 +2,7 @@
   <div>
     <div class="tag">
       <ul>
-        <li v-for="item in hotTags" :key="item.id" @click="changeMusicList(item.name)">
+        <li v-for="item in hotTags" :key="item" @click="changeMusicList(item.name)">
           <span>{{ item.name }}</span>
         </li>
       </ul>
@@ -12,10 +12,10 @@
   <!-- 歌单部分 -->
   
   <div class="list">
-    <music-list></music-list>
+    <MusicList @clickListCardItem="clickListCardItem"></MusicList>
   </div>
-  <div class="page" v-if="musicList.length !=0">
-    <el-pagination background layout="prev, pager, next" :total="500" :page-size="50" small :current-page="currentPage"
+  <div class="page" v-if="total != 0 && musicList.value.length != 0">
+    <el-pagination background layout="prev, pager, next" :total="total" :page-size="50" small :current-page="currentPage"
       @current-change="pageChange">
     </el-pagination>
   </div>
@@ -24,9 +24,11 @@
 
 <script setup lang="ts">
 import { onBeforeMount, provide, reactive, ref, toRefs } from 'vue';
-import MusicList from '../../components/MusicList.vue';
+import { useRouter } from 'vue-router';
+import '../../components/MusicList.vue';
 import { request } from '../../network/request';
-
+//添加路由
+const router = useRouter()
 //歌单标签
 let currentTag: any = reactive({})
 let hotTags: any = ref([])
@@ -41,6 +43,7 @@ async function getHotTag() {
 //歌单数据
 let musicList: any = reactive({})
 let currentPage = ref(1)
+let total = ref(0)
 // 根据歌单名请求歌单列表
 getMusicList()
 
@@ -51,15 +54,16 @@ async function getMusicList(tag?: string) {
     offset: 50 * (currentPage.value - 1),
   })
   // console.log(result);
-  // 里面的total可以用于分页，所以把整个对象都保存下来
   musicList.value = result.data
+  // total用于分页
+  total.value = result.data.total
 }
 
-onBeforeMount(() => {
 
-})
 //点击标签改变歌单
 const changeMusicList = (value: string) => {
+  musicList.value = []
+  console.log(musicList.value)
   getMusicList(value)
 }
 
@@ -69,6 +73,14 @@ const pageChange = (page: any) => {
   // console.log(e);
   currentPage.value = page;
   getMusicList();
+}
+
+// 点击歌单封面的回调
+const clickListCardItem = (id:number)=>{
+  console.log(id);
+  
+  console.log(router);
+  router.push({ name: "musicListDetail", params: { id } });
 }
 
 //给MusicList传数据
@@ -113,22 +125,6 @@ provide('musicList', musicList)
   // background-color: #dbdbdb;
 }
 
-.el-pagination.is-background .el-pager li:not(.disabled):hover {
-  color: black !important;
-  background-color: #f4f4f4 !important;
-}
 
-.el-pagination.is-background .el-pager li:not(.disabled).active {
-  background-color: #ec4141 !important;
-  color: white !important;
-}
-
-.el-pagination.is-background .btn-next,
-.el-pagination.is-background .btn-prev,
-.el-pagination.is-background .el-pager li {
-  background-color: #fff !important;
-  border: 1px solid #ddd;
-  font-weight: normal;
-}
 
 </style>

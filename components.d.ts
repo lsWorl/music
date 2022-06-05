@@ -5,6 +5,7 @@ import '@vue/runtime-core'
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    Comment: typeof import('./src/components/Comment.vue')['default']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
@@ -13,6 +14,7 @@ declare module '@vue/runtime-core' {
     ElCol: typeof import('element-plus/es')['ElCol']
     ElConfigProvider: typeof import('element-plus/es')['ElConfigProvider']
     ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElFooter: typeof import('element-plus/es')['ElFooter']
     ElHeader: typeof import('element-plus/es')['ElHeader']
@@ -27,17 +29,26 @@ declare module '@vue/runtime-core' {
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSlider: typeof import('element-plus/es')['ElSlider']
     ElSubMenu: typeof import('element-plus/es')['ElSubMenu']
+    ElTable: typeof import('element-plus/es')['ElTable']
+    ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
+    ElTabPane: typeof import('element-plus/es')['ElTabPane']
+    ElTabs: typeof import('element-plus/es')['ElTabs']
     HeadBar: typeof import('./src/components/HeadBar.vue')['default']
     HeadNav: typeof import('./src/components/HeadNav.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
+    InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
     LeftBar: typeof import('./src/components/LeftBar.vue')['default']
+    Loading: typeof import('element-plus/es')['ElLoadingDirective']
     MusicList: typeof import('./src/components/MusicList.vue')['default']
     PlayControl: typeof import('./src/components/PlayControl.vue')['default']
     Recom: typeof import('./src/components/Recom.vue')['default']
     Recommend: typeof import('./src/components/Recommend.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SecondNavBar: typeof import('./src/components/SecondNavBar.vue')['default']
+    SingerMusicList: typeof import('./src/components/SingerMusicList.vue')['default']
     TableList: typeof import('./src/components/TableList.vue')['default']
+    UserListCard: typeof import('./src/components/UserListCard.vue')['default']
   }
 }
 

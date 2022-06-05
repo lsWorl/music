@@ -13,6 +13,8 @@ const Audio = ()=>import('../page/Audio.vue')
 const Like = ()=>import('../page/Like.vue')
 const RecentPlay = ()=>import('../page/RecentPlay.vue')
 const LiseningList = ()=>import('../page/LiseningList.vue')
+
+const MusicListDetail = ()=>import('../page/MusicListDetail.vue')
 //创建一个路由
 const routes:Array<RouteRecordRaw> = [
     {
@@ -58,6 +60,10 @@ const routes:Array<RouteRecordRaw> = [
                 name: 'VedioPage',
                 component: VedioPage
             },
+            { 
+                path: 'musiclistdetail/:id',
+                name: 'musicListDetail',
+                component: MusicListDetail },
             {
                 path: 'audio',
                 name: 'Audio',

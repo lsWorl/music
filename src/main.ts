@@ -12,6 +12,8 @@ import store from './store'
 import './assets/iconfont/iconfont.json'
 import './assets/iconfont/iconfont.css'
 
+import './assets/css/replaceElement.scss'
+
 const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

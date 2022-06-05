@@ -7,9 +7,9 @@
       <head-nav></head-nav>
       <div class="scrollBar">
         <el-scrollbar>
-        <!-- 中间部分 -->
+          <!-- 中间部分 -->
           <router-view></router-view>
-      </el-scrollbar>
+        </el-scrollbar>
       </div>
     </div>
   </div>
@@ -21,7 +21,14 @@ import '../../components/LeftBar.vue';
 import '../../components/HeadBar.vue';
 import '../../components/HeadNav.vue';
 import './Recommend.vue'
-import { provide, ref } from 'vue';
+import { onMounted, provide, ref } from 'vue';
+import { ElMessage } from 'element-plus'
+onMounted(() => {
+  ElMessage({
+    message: '此项目调用了网易云接口，不登录很多歌只有试听阶段',
+    type: 'warning',
+  })
+})
 
 //传递给导航栏数据
 const nav = ref([
@@ -50,7 +57,7 @@ provide('MusicMuseumnav', nav)
 </script>
 
 <style lang="scss" scoped>
-.scrollBar{
+.scrollBar {
   // background-color: aqua;
   height: calc(80vh - 110px);
   width: 100%;

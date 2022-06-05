@@ -1,0 +1,88 @@
+// 歌曲列表部分
+.el-tabs__nav-wrap::after {
+  height: 0!important;
+}
+
+.el-tabs__active-bar {
+  background-color: #1ecf9d!important;
+  bottom: 4px !important;
+}
+
+.el-table .cell {
+  line-height: 20px !important;
+  font-size: 16px !important;
+  transform: scale(0.88);
+  color: black !important;
+  text-overflow: ellipsis!important;
+  overflow: hidden!important;
+  white-space: nowrap!important;
+}
+
+.el-table th>.cell {
+  font-weight:normal !important;
+  font-size: 16px !important;
+  transform: scale(0.88);
+  color:rgb(148, 148, 148) !important;
+  margin-bottom: 5px;
+}
+
+.el-table--mini td, .el-table--mini th {
+  padding: 10px 0!important;
+}
+
+.el-table td, .el-table th.is-leaf {
+  border: none !important;
+}
+
+tbody .el-table th, .el-table tr {
+  background-color: #f9f9f9 !important;
+}
+
+.el-table--enable-row-hover .el-table__body tr:hover>td{
+  background-color: #f0f1f2 !important;
+}
+
+.el-table__body tr.current-row>td {
+  background-color: #e5e5e5 !important;
+}
+
+
+.el-tabs__item:hover {
+  color: black!important;
+}
+.el-tabs__item {
+  font-size: 14px!important;
+}
+.el-tabs__item.is-active {
+  color: black!important;
+  font-weight: 600;
+}
+// 分页
+.el-pagination.is-background .el-pager li:not(.disabled):hover {
+  background-color: #f4f4f4 !important;
+}
+
+.el-pagination.is-background .el-pager li:not(.is-disabled).is-active {
+  background-color: #1ecf9d !important;
+}
+
+.el-pagination.is-background .btn-next,
+.el-pagination.is-background .btn-prev,
+.el-pagination.is-background .el-pager li {
+  background-color: #fff !important;
+  border: 1px solid #ddd;
+  font-weight: normal;
+}
+
+//评论
+.el-dialog__body {
+  padding: 0 20px 40px !important;
+}
+
+.el-dialog {
+  border-radius: 10px !important;
+}
+
+.el-dialog__close:hover {
+  color: #ea4848 !important;
+}

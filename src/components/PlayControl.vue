@@ -1,20 +1,33 @@
 <template>
   <div class="foot">
+    <audio ref="audioPlayer" autoplay :src="musicUrl" @play="changeState(true)" @pause="changeState(false)"
+      @ended="changeMusic('next')" @timeupdate="timeupdate"></audio>
+    <!-- 进度条 -->
     <div class="progressBar">
       <el-slider :class="['progressSlider']" v-model="timeProgress" :show-tooltip="true" @change="changeProgress">
       </el-slider>
-
     </div>
     <div class="footBottom">
+
       <!-- 左侧图片和歌名等部分 -->
       <div class="left">
         <!-- 图片 -->
-        <div class="loadPic">
-          <div></div>
+        <div class="loadPic" v-if="musicDetail.value" @click="store.commit('changeMusicDetailCardState')">
+          <img :src="musicDetail.value.al.picUrl" alt="" :draggable="false" />
         </div>
+        <div class="loadPic" v-else><img src="../assets/images/logoPic.jpg" alt="" /></div>
         <div class="hid">
-          <span class="song">歌名111111111111111111111 - </span>
-          <span class="singer">歌手</span>
+          <div class="nameInfo">
+            <div>
+              <span class="song" v-if="musicDetail.value">{{ musicDetail.value.name }}</span>
+              <span class="song" v-else>歌名</span>
+            </div>
+            <div>
+              <span class="singer" v-if="musicDetail.value">{{ musicDetail.value.ar[0].name }}</span>
+              <span class="singer" v-else>歌手</span>
+            </div>
+          </div>
+
           <div class="ic">
             <i class="iconfont icon-xihuan iconfont_size"></i>
             <el-icon>
@@ -62,24 +75,121 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { getCurrentInstance, onMounted, reactive, ref, watch } from "vue";
+import { useStore } from "vuex";
+import { request } from "../network/request";
 import { handleMusicTime, returnSecond } from '../plugins/utils'
+import { ElMessage } from 'element-plus'
+//获取当前实例，来获得播放音乐的ref
+let instance: any
+onMounted(() => {
+  instance = getCurrentInstance()
+  // console.log(instance.ctx.$refs.audioPlayer)
+})
+const store = useStore()
+let lastSecond = 0;
+// 总时长的秒数
+let durationNum = 0;
+// 保存当前音量
+let volumeSave = 0;
+// 当前音乐类型，用于下载
+let musicType = "";
+//当前音乐索引值
+let currentMusicIndex = ref(0)
+//当前音乐
+let musicList = reactive([])
+//当前音乐路径
+let musicUrl = ref('')
 // 当前播放时间位置
-const currentTime = ref('00:00')
+let currentTime = ref('00:00')
 // 音乐总时长
-const duration = "00:00"
+let duration = ref("00:00")
 // 进度条的位置
-const timeProgress = ref(0)
+let timeProgress = ref(0)
 // 音量
-const volume = 30
+let volume = 30
 // 是否静音
-const isMuted = false
+let isMuted = false
 // 是否暂停
-const isPause = ref(false)
+let isPause = ref(false)
 //是否随机播放
-const isRadom = ref(false)
+let isRadom = ref(false)
 //是否点击了播放列表
-const drawer = ref(false)
+let drawer = ref(false)
+//播放模式
+let playType = ref('order')
+
+
+let musicDetail = reactive({})
+// 请求歌曲的url
+async function getMusicDetail(id: any) {
+  store.commit("updateMusicLoadState", true);
+  let result = await request("/song/url", { id });
+  // 获取不到url
+  if (result.data.data[0].url == null) {
+    ElMessage.error("该歌曲暂无版权，将为您播放下一首歌曲");
+    changeMusic("next");
+    return;
+  }
+  musicUrl.value = result.data.data[0].url;
+  musicType = result.data.data[0].type.toLowerCase();
+  store.commit("updateMusicLoadState", false);
+}
+
+// 根据id找到 musicList中对应的musicDetail
+const getMusicDetailFromMusicList = () => {
+  let index = musicList.value.findIndex(
+    (item: any) => item.id == store.state.musicId
+  );
+
+  if (index != -1) {
+    // 记录当前音乐的index
+    currentMusicIndex.value = index;
+    // 将索引传至vuex
+    store.commit("updateCurrentIndex", index);
+    musicDetail.value = musicList.value[index];
+    // 直接从audio标签中的duration属性拿时长会有请求时差问题，所以直接在musicInfo中拿
+    duration.value = musicList.value[index].dt;
+  }
+}
+
+//监听id的变化
+watch(() => store.state.musicId, (id: any) => {
+  console.log("vuex中的id发生了变化")
+  pauseMusic()
+  musicList.value = store.state.musicList
+  getMusicDetailFromMusicList()
+  getMusicDetail(id)
+  durationNum = returnSecond(duration.value)
+}, { deep: true })
+
+// 当前播放时间位置
+const timeupdate = () => {
+  // console.log(this.$refs.audioPlayer.currentTime);
+  // 节流
+  let time = instance.ctx.$refs.audioPlayer.currentTime;
+  // 将当前播放时间保存到vuex  如果保存到vuex这步节流,会导致歌词不精准,误差最大有1s
+  store.commit("updateCurrentTime", time);
+
+  time = Math.floor(time);
+  if (time !== lastSecond) {
+    // console.log(time);
+    lastSecond = time;
+    currentTime.value = time;
+    // 计算进度条的位置
+    timeProgress.value = Math.floor((time / durationNum) * 100);
+    // console.log(this.timeProgress);
+  }
+}
+
+// 播放音乐的函数
+const playMusic = () => {
+  instance.ctx.$refs.audioPlayer.play();
+}
+// 暂停音乐的函数
+const pauseMusic = () => {
+  instance.ctx.$refs.audioPlayer.pause();
+}
 // 拖动进度条的回调
 const changeProgress = (e: any) => {
   console.log(e);
@@ -89,26 +199,87 @@ const changeProgress = (e: any) => {
   // this.$refs.audioPlayer.currentTime = currentTime;
 }
 
+// 切歌函数
+const changeMusic = (type: string, id?: any) => {
+  if (type == "click") {
+    // 点击抽屉row进行切歌
+    store.commit("updateMusicId", id);
+  } else if (type == "pre") {
+    let currentIndex = currentMusicIndex.value;
+    let preIndex;
+    if (playType.value == "order") {
+      preIndex =
+        currentIndex - 1 < 0
+          ? musicList.value.length - 1
+          : currentIndex - 1;
+    } else if (playType.value == "random") {
+      if (musicList.value.length == 1) {
+        preIndex = currentIndex;
+      } else {
+        // Math.floor(Math.random()*10); 可均衡获取0到9的随机整数。
+        preIndex = currentIndex;
+        while (preIndex == currentIndex) {
+          preIndex = Math.floor(Math.random() * musicList.value.length);
+        }
+      }
+    }
+    console.log(musicList.value[preIndex].id);
+    store.commit("updateMusicId", musicList.value[preIndex].id);
+  } else if (type == "next") {
+    let currentIndex = currentMusicIndex.value;
+    let nextIndex;
+    if (playType.value == "order") {
+      nextIndex =
+        currentIndex + 1 == musicList.value.length
+          ? 0
+          : currentIndex + 1;
+    } else if (playType.value == "random") {
+      if (musicList.value.length == 1) {
+        nextIndex = currentMusicIndex;
+      } else {
+        // Math.floor(Math.random()*10); 可均衡获取0到9的随机整数。
+        nextIndex = currentMusicIndex;
+        while (nextIndex == currentMusicIndex) {
+          nextIndex = Math.floor(Math.random() * musicList.value.length);
+        }
+      }
+    }
+    // console.log(this.musicList.value[nextIndex].id);
+    store.commit("updateMusicId", musicList.value[nextIndex].id);
+  }
+}
+
+
+// audio开始或暂停播放的回调  在vuex中改变状态
+const changeState = (state: any) => {
+  store.commit("changePlayState", state);
+}
+
+
+
+
 </script>
 
 <style lang="scss" scoped>
-*{
+* {
   //用户禁止选中
   user-select: none;
 }
-.foot{
+
+.foot {
   position: absolute;
   bottom: 0px;
   background-color: #fff;
-  width: 100%;
+  width: 85%;
 }
+
 .progressBar {
   height: 10px;
-  /* background-color: #1ecd99; */
   /* overflow: hidden; */
+  padding-top: 10px;
   display: flex;
   align-items: center;
-  
+
 }
 
 .progressSlider {
@@ -145,10 +316,21 @@ const changeProgress = (e: any) => {
 
   .hid {
     overflow: hidden;
-    margin-left: 10px;
+    margin-left: 15px;
+    .nameInfo{
+      background-color: #1ecd99;
+      font-size: 14px;
+    }
   }
-
   .loadPic {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+
+    img {
+      width: 100%;
+    }
+
     >div {
       height: 50px;
       width: 50px;
@@ -157,7 +339,7 @@ const changeProgress = (e: any) => {
   }
 
   .song {
-    // margin-left: 10px;
+    margin-bottom: 10px;
   }
 }
 

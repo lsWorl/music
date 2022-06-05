@@ -10,18 +10,21 @@
     </div>
     <!-- 歌单部分 -->
     <h4>推荐歌单</h4>
-    <music-list></music-list>
+    <MusicList @clickListCardItem="clickListCardItem"></MusicList>
   </div>
 </template>
 
 <script setup lang="ts">
-import MusicList from '../../components/MusicList.vue'
+import '../../components/MusicList.vue'
 import { onBeforeMount, onMounted, provide, reactive, ref, toRefs } from 'vue';
 import { request } from '../../network/request'
+import { useRouter,useRoute } from 'vue-router';
 
+//添加路由
+const router = useRouter()
 //轮播图数据
 let bannerData: any = reactive({})
-
+let isLoad = false
 onBeforeMount(() => {
   console.log('生命周期调用')
   //触发功能
@@ -44,6 +47,13 @@ function getMusicList() {
   });
 }
 
+// 点击歌单封面的回调
+const clickListCardItem = (id:number)=>{
+  console.log(id);
+  
+  console.log(router);
+  router.push({ name: "musicListDetail", params: { id } });
+}
 //给MusicList传数据
 provide('musicList', musicList)
 
