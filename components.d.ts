@@ -39,6 +39,7 @@ declare module '@vue/runtime-core' {
     InfiniteScroll: typeof import('element-plus/es')['ElInfiniteScroll']
     LeftBar: typeof import('./src/components/LeftBar.vue')['default']
     Loading: typeof import('element-plus/es')['ElLoadingDirective']
+    LyricsScroll: typeof import('./src/components/LyricsScroll.vue')['default']
     MusicList: typeof import('./src/components/MusicList.vue')['default']
     PlayControl: typeof import('./src/components/PlayControl.vue')['default']
     Recom: typeof import('./src/components/Recom.vue')['default']

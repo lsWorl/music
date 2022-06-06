@@ -152,6 +152,7 @@ import { ref } from "vue";
 import "../components/UserListCard.vue";
 import "../components/Comment.vue";
 import { useStore } from "vuex";
+import { ElMessage } from "element-plus";
 const store = useStore()
 
 //点击歌单默认为歌单列表
@@ -250,7 +251,7 @@ async function getMusicListDetail() {
   });
   console.log(result);
   musicListDetail.value = result.data.playlist;
-  console.log(musicListDetail.value.tracks.length != musicListDetail.value.trackIds.length);
+  // console.log(musicListDetail.value.tracks.length != musicListDetail.value.trackIds.length)
   // 判断是否还有更多音乐
   if (musicListDetail.value.tracks.length != musicListDetail.value.trackIds.length) {
     isMore.value = true;
@@ -259,9 +260,6 @@ async function getMusicListDetail() {
   musicListDetail.value.tracks.forEach((item: any, index: any) => {
     musicListDetail.value.tracks[index].dt = handleMusicTime(item.dt);
   });
-  // 判断用户是否喜欢该音乐
-  // 直接两个循环性能损耗太厉害了 没什么思路暂时不做先
-  // let likeMusicList = this.$store.state.likeMusicList;
 }
 
 // 获取歌单评论
@@ -282,7 +280,7 @@ async function getMusicListComment(type?: any) {
   });
   console.log(res);
   if (res.data.code !== 200) {
-    // onmessage.error("获取评论失败,请稍后重试!");
+    ElMessage.error("获取评论失败,请稍后重试!")
   }
   comments.value = res.data;
   isCommentLoading.value = false;
@@ -327,7 +325,8 @@ async function getMusicDetail(ids: string) {
   scrollLoadDisabled.value = true;
 
   let res = await request("/song/detail", {
-    ids
+    ids,
+    fee: 0
   });
   // 处理时间
   console.log(res);
@@ -366,6 +365,7 @@ const loadMore = () => {
   });
   ids = ids.substring(0, ids.length - 1);
   // console.log(ids);
+  ElMessage('正在加载更多歌曲中，请稍后')
   getMusicDetail(ids);
 }
 
@@ -435,8 +435,6 @@ const clickTab = (e: any) => {
   display: flex;
   align-items: center;
 }
-
-
 
 .titleContent {
   font-size: 24px;

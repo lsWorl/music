@@ -87,6 +87,7 @@ export default createStore({
   // 切换音乐详情卡片的显隐
   changeMusicDetailCardState(state) {
       state.isMusicDetailCardShow = !state.isMusicDetailCardShow;
+      console.log('显示卡片详情')
   },
   updateCurrentTime(state, currentTime) {
       state.currentTime = currentTime;
@@ -100,7 +101,6 @@ export default createStore({
       state.currentRowInfo = currentRowInfo;
   },
   // 更新用户喜欢的音乐列表
-  // 才发现这里拼错了 懒得改了
   updataLikeMuiscList(state, likeMuiscList) {
       state.likeMuiscList = likeMuiscList;
   },

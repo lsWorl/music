@@ -1,4 +1,20 @@
-// 歌曲列表部分
+
+/* 修改element进度条样式 */
+.el-slider__runway {
+  background-color: #eaeaea;
+}
+
+.el-slider__bar {
+  background-color: #1ecd99 !important;
+}
+
+.el-slider__button {
+  border: 1px solid #ccc !important;
+  background-color: #1ecd99 !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
 .el-tabs__nav-wrap::after {
   height: 0!important;
 }
@@ -10,40 +26,42 @@
 
 .el-table .cell {
   line-height: 20px !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   transform: scale(0.88);
-  color: black !important;
+  color: rgb(128, 128, 128) !important;
   text-overflow: ellipsis!important;
   overflow: hidden!important;
   white-space: nowrap!important;
 }
 
+.el-table .cell i:nth-child(1) {
+  font-size: 14px;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 .el-table th>.cell {
   font-weight:normal !important;
-  font-size: 16px !important;
+  font-size: 14px !important;
   transform: scale(0.88);
   color:rgb(148, 148, 148) !important;
   margin-bottom: 5px;
 }
 
+.el-table__row td:nth-child(3) .cell {
+  color:rgb(36, 36, 36) !important;
+} 
+
 .el-table--mini td, .el-table--mini th {
-  padding: 10px 0!important;
+  padding: 3px 0!important;
 }
 
 .el-table td, .el-table th.is-leaf {
   border: none !important;
 }
 
-tbody .el-table th, .el-table tr {
-  background-color: #f9f9f9 !important;
-}
-
-.el-table--enable-row-hover .el-table__body tr:hover>td{
-  background-color: #f0f1f2 !important;
-}
-
-.el-table__body tr.current-row>td {
-  background-color: #e5e5e5 !important;
+.el-table__body tr.el-table__row--striped td {
+  background-color: #fff !important;
 }
 
 

@@ -26,6 +26,7 @@ export function request(url:string, params?:any) {
         console.log([err]);
         if (err.response.data.msg == '需要登录') {
             // cookie过期 退出登录
+            console.log('需要登录');
             // console.log(window.localStorage.getItem("userInfo"));
             // window.localStorage.setItem("userInfo", "");
             // 刷新页面

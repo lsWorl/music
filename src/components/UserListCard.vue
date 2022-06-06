@@ -63,7 +63,7 @@ watch(props.userList, () => {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .UserListCard {
   display: flex;
   flex-wrap: wrap;

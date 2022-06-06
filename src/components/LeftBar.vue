@@ -74,9 +74,9 @@ const changeBtn = (value: number) => {
   user-select: none;
 }
 .navigation_left {
+  height: 100vh;
   background-color: #f0f0f0;
   overflow: hidden;
-  height: 100rem;
   width: 13rem;
 
   .pic>img {
