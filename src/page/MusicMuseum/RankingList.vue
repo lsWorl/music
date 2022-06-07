@@ -1,11 +1,12 @@
 <template>
   <div class="rankingContainer">
-    <TableList :officialListDetailItem = "item" v-for="(item,index) in officialListDetail" :key="index"></TableList>
+    <TableList :officialListDetailItem = "item" v-for="(item,index) in officialListDetail" :key="index" 
+    @clickCheckAll="clickListCardItem"></TableList>
   </div>
   <div class="global">
         <div class="title" v-if="officialListDetail.lenth !=0">全球榜</div>
         <!-- 展示歌单列表 -->
-        <music-list class="listCard"></music-list>
+        <music-list class="listCard" @clickListCardItem="clickListCardItem"></music-list>
       </div>
 </template>
 
@@ -15,6 +16,8 @@ import { request } from "../../network/request";
 import { handleMusicTime } from '../../plugins/utils'
 import '../../components/TableList.vue'
 import '../../components/MusicList.vue'
+import { useRouter } from "vue-router";
+const router = useRouter()
 let officialList: any = []
 let officialListDetail: any = ref([])
 let globalList:any = reactive([])
@@ -51,7 +54,13 @@ async function getMusicListDetail(id: any) {
   officialListDetail.value.push(result);
   // console.log(officialListDetail)
 }
-
+// 点击榜单进入歌单详情界面
+   const clickListCardItem =(id:any) => {
+      if (id.id) {
+        id = id.id;
+      }
+      router.push({ name: "musicListDetail", params: { id } });
+    }
 
 
 //将globalList传递给子组件

@@ -17,7 +17,7 @@
       </div>
       <div class="listCardContainer">
         <!-- 歌手列表 -->
-        <music-list isLoad class="listCard" @bottomLoad="bottomLoad"></music-list>
+        <music-list isLoad class="listCard"  @bottomLoad="bottomLoad"></music-list>
       </div>
     </div>
   </div>
@@ -28,6 +28,8 @@ import { provide, reactive, ref } from 'vue';
 import '../../components/SecondNavBar.vue';
 import '../../components/MusicList.vue';
 import { request } from '../../network/request';
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const languageSort = ref([
   { area: -1, name: "全部" },
   { area: 7, name: "华语" },
@@ -140,6 +142,8 @@ function bottomLoad() {
     getSingerList();
   }
 }
+
+// 点击歌手item的回调
 
 </script>
 

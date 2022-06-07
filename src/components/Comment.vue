@@ -1,26 +1,5 @@
 <template>
   <div class="hotComments">
-    <div class="comments" v-if="props.commentType != '' && props.commentType != 'music' && props.isHotComment">
-      <el-input type="textarea" class="commentArea" maxlength="140" show-word-limit v-model="commentInput"
-        placeholder="留下你的评论" @input="inputComment"></el-input>
-      <div class="submitCommentButton">
-        <el-button size="small" round class="submitComment">评论</el-button>
-      </div>
-    </div>
-    <!-- 音乐单曲评论 -->
-    <div class="musicComment" v-else-if="props.commentType != '' && props.commentType == 'music'">
-      <el-button class="commentCardSwitch" size="small" round><i class="iconfont icon-ziyuan"></i> 发表我的音乐评论</el-button>
-      <el-dialog :visible="isCommentDialogShow" width="400px" @close="closeCommentDialog" append-to-body
-        class="commentDialog">
-        <div class="musicTitle">歌曲：{{ musicTitle }}</div>
-        <el-input type="textarea" class="commentArea musicCommentArea" maxlength="140" show-word-limit
-          v-model="commentInput" @input="inputComment" placeholder="留下你的评论"></el-input>
-        <!-- 提交评论 -->
-        <div class="submitCommentButton">
-          <el-button size="small" round class="submitComment musicSubmitComment">评论</el-button>
-        </div>
-      </el-dialog>
-    </div>
     <div class="commentHeader">
       <slot name="title"></slot>
     </div>
@@ -40,22 +19,25 @@
           </div>
         </div>
         <div class="commentButtons">
-          <div :class="item.liked ? 'likeCurrentComment' : ''">
-            <i class="iconfont icon-good"></i> {{ item.likedCount }}
+          <div class="commentCreatedTime">
+            <!-- {{ item.time }} -->
           </div>
-          <div><i class="iconfont icon-zhuanfa"></i></div>
+          <div>
+            <i class="iconfont icon-dianzan_kuai"></i> {{ item.likedCount }}
+          </div>
+          <div><i class="iconfont icon-zhuanfa1"></i></div>
           <div>
             <i class="iconfont icon-pinglun"></i>
           </div>
         </div>
-
       </div>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { computed, ref, watch } from "vue";
+import { formatDate } from "../plugins/utils";
 
 const props = defineProps<{
   comments: any
@@ -64,37 +46,17 @@ const props = defineProps<{
   musicTitle?: String
   isHotComment?: Boolean
 }>()
-//评论
-let commentInput = ref('')
-// 是否显示评论dialog
-let isCommentDialogShow = ref(false)
-// 评论模式   true是常规评论   false是楼层评论
-let commentMode = ref(true)
-// 楼层回复前面几个字的长度
-let floorCommentInputLength = ref(0)
-// 用于暂存楼层评论id
-let floorCommentId = ref("")
-// 监听键盘事件
-const inputComment = () => {
-  // 如果是楼层回复
-  if (commentMode.value == false) {
-    if (commentInput.value.length < floorCommentInputLength.value) {
-      // 当长度小于当前楼层评论前面默认的字时
-      commentMode.value = true;
-      console.log("修改mode");
-    }
+let showTime:any = ref('')
+computed(() => showTime.value, {
+  onTrack(e) {
+    // 当 count.value 作为依赖被追踪时触发
+    debugger
+  },
+  onTrigger(e) {
+    // 当 count.value 被修改时触发
+    debugger
   }
-}
-
-// 关闭评论dialog的回调
-const closeCommentDialog = () => {
-  isCommentDialogShow.value = false;
-  commentInput.value = "";
-  floorCommentId.value = "";
-  commentMode.value = true;
-  floorCommentInputLength.value = 0;
-}
-
+})
 </script>
 
 <style lang="scss" scoped>
@@ -257,8 +219,5 @@ const closeCommentDialog = () => {
 }
 
 
-.likeCurrentComment,
-.likeCurrentComment i {
-  color: #ec4141 !important;
-}
+
 </style>

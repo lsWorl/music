@@ -1,34 +1,77 @@
 <template>
   <div class="musicDetailCard" :class="[
-    isMusicDetailCardShow ? '' : 'hide',
+    isMusicDetailCardShow ? '' : 'hide'
   ]">
     <div class="closeCard" @click="closeCard">
       <el-icon class="iconfont">
         <ArrowDownBold />
       </el-icon>
     </div>
-    <div class="musicDetailCardContainer" v-if="!cleanCard && musicInfo.value.name">
+    <div class="musicDetailCardContainer" v-if="!cleanCard && musicInfo.value">
       <div class="top">
         <div class="left">
           <div class="discContainer">
             <!-- 左侧部分 -->
+            <div class="disc">
+              <img :src="musicInfo.value.al.picUrl" alt="">
+            </div>
           </div>
         </div>
         <div class="right">
           <div class="title">
-						<div class="musicName">{{ musicInfo.value.name }}</div>
-						<div class="album" @click="goToDetailPage('album', musicInfo.value.al.id)">
-							{{ musicInfo.value.al.name }}
-						</div>
-						<div class="singer" @click="goToDetailPage('singerDetail', musicInfo.value.ar[0].id)">
-							{{ musicInfo.value.ar[0].name }}
-						</div>
-					</div>
-          <lyrics-scroll :lyric="lyric"></lyrics-scroll>
+            <div class="musicName">{{ musicInfo.value.name }}</div>
+            <div class="album" @click="goToDetailPage('album', musicInfo.value.al.id)">
+              {{ musicInfo.value.al.name }}
+            </div>
+            <div class="singer" @click="goToDetailPage('singerDetail', musicInfo.value.ar[0].id)">
+              {{ musicInfo.value.ar[0].name }}
+            </div>
+          </div>
+          <lyrics-scroll class="lyric" :lyric="lyric"></lyrics-scroll>
         </div>
-
       </div>
+      <div class="bottom" v-loading="isCommentLoading" element-loading-background="rgba(255, 255, 255, 0.1)">
+        <Comment 
+        :comments="hotComments" 
+        :commentType="'music'" 
+        :commentId="store.state.musicId + ''"
+        :musicTitle="musicInfo.value.name"
+        @getComment="getMusicComment(store.state.musicId)" 
+        class="commentComponent"
+          v-if="currentCommentPage == 1">
+          <template v-slot:title>
+            <div>热门评论</div>
+          </template>
+        </Comment>
+        <comment
+          :comments="comment.value.comments"
+          :commentType="'music'"
+          :commentId="store.state.musicId + ''"
+          :musicTitle="musicInfo.name"
+          @getComment="getMusicComment(store.state.musicId)"
+          class="commentComponent"
+          >
+          <template v-slot:title>
+            <div>最新评论({{ comment.value.total }})</div>
+          </template></comment
+        >
+        <!-- 评论分页 -->
+        <div class="page" v-show="comment.value.comments && comment.value.comments[0]">
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="comment.value.total"
+            small
+            :page-size="20"
+            :current-page="currentCommentPage"
+            @current-change="commentPageChange"
+          />
+        </div>
+      </div>
+
+
     </div>
+    <div v-else class="tip">当前无音乐</div>
   </div>
 </template>
 
@@ -37,6 +80,7 @@ import { ElMessage } from "element-plus";
 import { reactive, ref, watch } from "vue";
 import { useStore } from "vuex";
 import { request } from "../network/request";
+import Comment from "../components/Comment.vue";
 //store
 const store = useStore()
 // 定时器
@@ -59,13 +103,12 @@ let isCommentLoading = ref(false)
 let hotComments = ref([])
 //是否点击了打开音乐详情
 watch(() => store.state.isMusicDetailCardShow, (isMusicDetailShow: any) => {
-  console.log(123)
   isMusicDetailCardShow.value = isMusicDetailShow
   //如果卡片没有展示就不发送请求和渲染里面的内容
   //   删除定时器 避免用户在关闭卡片的1s内又打开卡片 导致展示内容被删除
   clearTimeout(timer)
   cleanCard.value = false
-  if (isMusicDetailShow && !comment.value.comments && store.state.musicId != "") {
+  if (isMusicDetailShow && store.state.musicId != "") {
     console.log("请求歌词和评论");
     getLyric(store.state.musicId)
     getMusicComment(store.state.musicId)
@@ -102,7 +145,6 @@ async function getLyric(id: any) {
   let time = "";
   let value = "";
   let result: any = [];
-
   //去除空行
   arr.forEach((item: any) => {
     if (item != "") {
@@ -121,6 +163,8 @@ async function getLyric(id: any) {
   lyric.value = result
 }
 
+
+//获取音乐评论
 async function getMusicComment(id: any, type?: any) {
   // 获取时间戳
   let date = new Date()
@@ -168,7 +212,11 @@ async function getMusicComment(id: any, type?: any) {
   isCommentLoading.value = false;
   comment.value = res.data;
 }
-
+//点击分页按钮的回调
+  const commentPageChange = (page:any)=>{
+      currentCommentPage.value = page;
+      getMusicComment(store.state.musicId, "changePage");
+    }
 // 点击关闭卡片的回调
 const closeCard = () => {
   store.commit("changeMusicDetailCardState");
@@ -189,11 +237,11 @@ const closeCard = () => {
 
 .musicDetailCard {
   position: fixed;
-  width: 86.3%;
+  width: 86%;
   // height: calc(100vh - 55px);
   height: calc(80vh + 40px);
   bottom: 111px;
-  left: 208px;
+  left: 14%;
   z-index: 1000;
   transition: bottom 0.5s ease;
   background-color: #fff;
@@ -212,7 +260,23 @@ const closeCard = () => {
   height: 100%;
   overflow-y: scroll;
 }
-
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+::-webkit-scrollbar {
+  background-color: #f5f5f5;
+  width: 7px;
+}
+/*定义滚动条轨道 内阴影+圆角*/
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #f5f5f5;
+}
+/*定义滑块 内阴影+圆角*/
+::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  -webkit-box-shadow: inset 0 0 6px 6px rgba(0, 0, 0, 0.3);
+  background-color: #ddd;
+}
 .hide {
   // bottom: calc(-100vh + 55px);
   bottom: calc(-80vh - 40px);
@@ -224,42 +288,27 @@ const closeCard = () => {
 
 .top {
   display: flex;
-  justify-content: center;
+  justify-content: space-around;
 }
 
 .left {
   width: 220px;
-  margin: 0 30px 0 -40px;
+  margin: 30px 0px 0;
+ 
 }
+
 
 .discContainer {
   margin-top: 60px;
-  width: 220px;
+  width: 320px;
   position: relative;
 }
 
-.needle {
-  position: relative;
-  left: 50%;
-  width: 88px;
-  height: 72px;
-  z-index: 10000;
-  transition: all 1s;
-  transform-origin: 5.3px 5.3px;
-}
-
-.needle img {
-  width: 100%;
-}
-
-.needleRotate {
-  transform-origin: 5.3px 5.3px;
-  transform: rotate(22deg);
-}
 
 .disc {
-  width: 220px;
-  height: 220px;
+  user-select: none;
+  width: 350px;
+  height: 350px;
   position: relative;
   top: -12px;
 }
@@ -268,39 +317,12 @@ const closeCard = () => {
   width: 100%;
 }
 
-.disc .musicAvatar {
-  position: absolute;
-  top: 35px;
-  left: 35px;
-  width: 150px;
-  z-index: -1;
-}
 
-/* 碟子设置旋转动画 */
-.discAnimation {
-  /* infinite动画无限循环 */
-  animation: disc 25s linear infinite;
-  /* 动画延迟一秒 */
-  animation-delay: 0.8s;
-}
 
-@keyframes disc {
-  from {
-    transform: rotate(0deg);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.pause {
-  animation-play-state: paused;
-  -webkit-animation-play-state: paused;
-}
 
 .right {
-  width: 350px;
+  width: 600px;
+  // background-color: aqua;
 }
 
 .title {
@@ -323,13 +345,15 @@ const closeCard = () => {
 .bottom {
   margin: 40px auto;
   // width: 55vw;
-  width: 44vw;
+  width: 60vw;
 }
 
 .page {
   width: 100%;
   text-align: center;
-  padding-bottom: 20px;
+  // padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .tip {
@@ -340,12 +364,6 @@ const closeCard = () => {
   transform: translate(-50%, -50%);
 }
 
-.changeBackground {
-  position: absolute;
-  bottom: 10px;
-  right: 20px;
-  cursor: pointer;
-}
 
 .album,
 .singer {

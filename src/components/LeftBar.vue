@@ -77,7 +77,8 @@ const changeBtn = (value: number) => {
   height: 100vh;
   background-color: #f0f0f0;
   overflow: hidden;
-  width: 13rem;
+  width: 100%;
+  
 
   .pic>img {
     margin-top: 20px;

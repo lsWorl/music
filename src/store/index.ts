@@ -36,11 +36,6 @@ export default createStore({
     collectMusicList: [],
     // 用户创建的歌单
     createdMusicList: [],
-    // 要下载的音乐信息
-    downloadMusicInfo: {
-        name: '',
-        url: '',
-    },
     // 已喜欢的视频
     likeVideoList: null,
     officialList: []
@@ -49,17 +44,17 @@ export default createStore({
   },
   mutations: {
     // 更新音乐url
-    updateMusicId(state, musicId) {
-      state.musicId = musicId;
+    updateMusicId(state:any,musicId) {
+      state.musicId = musicId
       console.log('updateMusicId',musicId);
   },
   // 修改播放状态
-  changePlayState(state, isPlay) {
+  changePlayState(state:any, isPlay:any) {
       state.isPlay = isPlay;
       // console.log('changePlayState');
   },
   // 更新歌单列表和歌单id
-  updateMusicList(state, payload) {
+  updateMusicList(state:any, payload:any) {
       // 当歌单id发生变化时,重置当前播放音乐索引
       if (payload.musicListId != state.musicListId) {
           state.musicListId = payload.musicListId;
@@ -74,63 +69,31 @@ export default createStore({
   },
 
   //更新登录状态
-  updataLoginState(state, flag = false) {
+  updataLoginState(state:any, flag:any = false) {
       state.isLogin = flag;
   },
 
   // 当前播放音乐的索引
-  updateCurrentIndex(state, index) {
+  updateCurrentIndex(state:any, index:any) {
       // console.log('updateCurrentIndex');
       state.currentIndex = index;
       // console.log(state.currentIndex);
   },
   // 切换音乐详情卡片的显隐
-  changeMusicDetailCardState(state) {
+  changeMusicDetailCardState(state:any) {
       state.isMusicDetailCardShow = !state.isMusicDetailCardShow;
       console.log('显示卡片详情')
   },
-  updateCurrentTime(state, currentTime) {
+  updateCurrentTime(state:any, currentTime:any) {
       state.currentTime = currentTime;
   },
   // 更新音乐的加载状态
-  updateMusicLoadState(state, isLoad) {
+  updateMusicLoadState(state:any, isLoad:any) {
       state.isMusicLoad = isLoad;
   },
   // 用于记录当前播放行的信息 便于下次渲染和清除播放样式
-  updateCurrentRowInfo(state, currentRowInfo) {
+  updateCurrentRowInfo(state:any, currentRowInfo:any) {
       state.currentRowInfo = currentRowInfo;
-  },
-  // 更新用户喜欢的音乐列表
-  updataLikeMuiscList(state, likeMuiscList) {
-      state.likeMuiscList = likeMuiscList;
-  },
-  // 更新已收藏的专辑列表
-  updateSubAlbumList(state, subAlbumList) {
-      state.subAlbumList = subAlbumList;
-  },
-  // 更新已收藏的歌手列表
-  updateSubSingerList(state, subSingerList) {
-      state.subSingerList = subSingerList;
-  },
-  // 更新已收藏的视频列表
-  updateSubVideoList(state, subVideoList) {
-      state.subVideoList = subVideoList;
-  },
-  // 更新已收藏的歌单
-  updateCollectMusicList(state, collectMusicList) {
-      state.collectMusicList = collectMusicList;
-  },
-  // 更新用户创建的歌单
-  updateCreatedMusicList(state, createdMusicList) {
-      state.createdMusicList = createdMusicList;
-  },
-  // 更新当前下载的音乐信息
-  updateDownloadMusicInfo(state, info) {
-      state.downloadMusicInfo = info;
-  },
-  // 更新已喜欢的视频列表
-  updateLikeVideoList(state, likeVideoList) {
-      state.likeVideoList = likeVideoList;
   },
   },
   actions: {

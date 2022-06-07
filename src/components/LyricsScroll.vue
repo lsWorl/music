@@ -116,7 +116,6 @@ let lyricsIndex = ref(0)
   font-size: 12px;
   text-align: center;
   overflow-y: scroll;
-  /* overflow: scroll; */
 }
 
 .lyrics::-webkit-scrollbar {

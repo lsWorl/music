@@ -6,6 +6,55 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "200970",
+      "name": "3.1转发",
+      "font_class": "31zhuanfa",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "1901655",
+      "name": "转发",
+      "font_class": "zhuanfa",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "3996608",
+      "name": "转发",
+      "font_class": "zhuanfa1",
+      "unicode": "e63c",
+      "unicode_decimal": 58940
+    },
+    {
+      "icon_id": "6380878",
+      "name": "点赞_块",
+      "font_class": "dianzan_kuai",
+      "unicode": "ec8c",
+      "unicode_decimal": 60556
+    },
+    {
+      "icon_id": "9686817",
+      "name": "点赞",
+      "font_class": "dianzan",
+      "unicode": "e619",
+      "unicode_decimal": 58905
+    },
+    {
+      "icon_id": "10937697",
+      "name": "赞",
+      "font_class": "good",
+      "unicode": "e62a",
+      "unicode_decimal": 58922
+    },
+    {
+      "icon_id": "17605481",
+      "name": "点赞",
+      "font_class": "dianzan1",
+      "unicode": "e816",
+      "unicode_decimal": 59414
+    },
+    {
       "icon_id": "6776386",
       "name": "声音_实体",
       "font_class": "shengyin_shiti",

@@ -37,7 +37,7 @@
                 <i class="iconfont icon-arrow_right_fat playAll"></i>
                 <span>播放全部</span>
               </div>
-              <div class="buttonItem" v-if="!isCreated" @click="collectList">
+              <div class="buttonItem" v-if="!isCreated">
                 <i class="iconfont icon-xihuan" :class="isSub ? 'red' : ''"></i>
                 <span>{{ isSub ? "已收藏" : "收藏" }}</span>
               </div>
@@ -92,16 +92,14 @@
                 <el-table-column prop="dt" label="时长" min-width="100">
                 </el-table-column>
               </el-table>
-              <!-- 登录后查看更多 -->
+              
               <div class="loadMore" @click="loadMore">加载更多</div>
-
-              <div class="placeholder"></div>
             </el-tab-pane>
             <el-tab-pane label="评论" name="second">
               <div class="commentList" v-if="comments.value" v-loading="isCommentLoading">
                 <!-- 精彩评论 -->
                 <Comment :commentType="'musicList'" :comments="comments.value.hotComments"
-                  :commentId="musicListDetail.value.id + ''" ref="hotComments">
+                  :commentId="musicListDetail.value.id + ''" ref="hotComments" v-if="comments.value.hotComments.length !=0">
                   <template v-slot:title>
                     <div>精彩评论</div>
                   </template>
@@ -199,7 +197,8 @@ const playAll = () => {
 // 双击table的row的回调
 async function clickRow(row: any) {
   console.log(row);
-  // 将musicId提交到vuex中 供bottomControl查询歌曲url和其它操作
+  
+  // 将musicId提交到vuex中 供控制部分查询歌曲url和其它操作
   store.commit("updateMusicId", row.id);
   // 如果歌单发生变化,则提交歌单到vuex
   if (musicListDetail.value.id != store.state.musicListId) {
@@ -278,11 +277,12 @@ async function getMusicListComment(type?: any) {
     limit: 50,
     timestamp,
   });
-  console.log(res);
+  // console.log(res);
   if (res.data.code !== 200) {
     ElMessage.error("获取评论失败,请稍后重试!")
   }
   comments.value = res.data;
+  console.log(comments.value.hotComments)
   isCommentLoading.value = false;
   console.log("重新歌单获取评论");
 }
@@ -371,10 +371,9 @@ const loadMore = () => {
 
 // 点击el-tab-pane的回调
 const clickTab = (e: any) => {
-
   if (e.index == 1 && !comments.comments) {
     getMusicListComment();
-    console.log(comments.comments);
+    console.log(followedsListData)
   } else if (e.index == 2 && !followedsListData.isLoaded) {
     getMusicListFolloweds();
 

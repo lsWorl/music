@@ -8,14 +8,13 @@
       </el-slider>
     </div>
     <div class="footBottom">
-
       <!-- 左侧图片和歌名等部分 -->
       <div class="left">
         <!-- 图片 -->
         <div class="loadPic" v-if="musicDetail.value" @click="store.commit('changeMusicDetailCardState')">
           <img :src="musicDetail.value.al.picUrl" alt="" :draggable="false" />
         </div>
-        <div class="loadPic" v-else><img :draggable="false" src="../assets/images/logoPic.jpg" alt="" /></div>
+        <div class="loadPic" v-else @click="store.commit('changeMusicDetailCardState')"><img :draggable="false" src="../assets/images/logoPic.jpg" alt="" /></div>
         <div class="hid">
           <div class="nameInfo">
             <div>
@@ -80,7 +79,6 @@
           <h2>当前没有歌曲</h2>
         </div>
       </el-drawer>
-
     </div>
   </div>
 </template>
@@ -103,8 +101,6 @@ let lastSecond = ref(0);
 let durationNum = ref(0);
 // 保存当前音量
 let volumeSave = ref(0);
-// 当前音乐类型，用于下载
-let musicType = "";
 //当前音乐索引值
 let currentMusicIndex = ref(0)
 //当前音乐
@@ -155,7 +151,6 @@ async function getMusicDetail(id: any) {
     return;
   }
   musicUrl.value = result.data.data[0].url;
-  musicType = result.data.data[0].type.toLowerCase();
   store.commit("updateMusicLoadState", false);
 }
 

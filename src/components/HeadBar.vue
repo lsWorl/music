@@ -3,12 +3,12 @@
     <div>
       <div class="arrowGroup">
         <div>
-          <el-icon size="18px">
+          <el-icon size="18px" @click="before">
             <ArrowLeftBold />
           </el-icon>
         </div>
         <div>
-          <el-icon size="18px">
+          <el-icon size="18px" @click="after">
             <ArrowRightBold />
           </el-icon>
         </div>
@@ -27,6 +27,16 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Search } from '@element-plus/icons-vue'
+import { useRouter } from "vue-router";
+const router = useRouter()
+const before = ()=>{
+  console.log(router)
+  router.back()
+}
+const after = ()=>{
+  router.forward()
+}
+console.log(router)
 const input = ref('')
 </script>
 

@@ -49,9 +49,9 @@ function getMusicList() {
 
 // 点击歌单封面的回调
 const clickListCardItem = (id:number)=>{
-  console.log(id);
+  // console.log(id);
   
-  console.log(router);
+  // console.log(router);
   router.push({ name: "musicListDetail", params: { id } });
 }
 //给MusicList传数据
