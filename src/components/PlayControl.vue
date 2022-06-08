@@ -91,8 +91,10 @@ import { handleMusicTime, returnSecond } from '../plugins/utils'
 import { ElMessage } from 'element-plus'
 //获取当前实例，来获得播放音乐的ref
 let instance: any
+let audioPlayer:any = ref(null)
 onMounted(() => {
-  instance = getCurrentInstance()
+  // instance = getCurrentInstance()
+  console.log(audioPlayer.value)
   // console.log(instance.ctx.$refs.audioPlayer)
 })
 const store = useStore()
@@ -186,7 +188,7 @@ watch(() => store.state.musicId, (id: any) => {
 const timeupdate = () => {
   // console.log(instance.ctx.$refs.audioPlayer.currentTime);
   // 节流
-  let time = instance.ctx.$refs.audioPlayer.currentTime;
+  let time = audioPlayer.value.currentTime;
   // 将当前播放时间保存到vuex  如果保存到vuex这步节流,会导致歌词不精准,误差最大有1s
   store.commit("updateCurrentTime", time);
   time = Math.floor(time);
@@ -203,11 +205,11 @@ const timeupdate = () => {
 
 // 播放音乐的函数
 const playMusic = () => {
-  instance.ctx.$refs.audioPlayer.play();
+  audioPlayer.value.play();
 }
 // 暂停音乐的函数
 const pauseMusic = () => {
-  instance.ctx.$refs.audioPlayer.pause();
+  audioPlayer.value.pause();
 }
 // 拖动进度条的回调
 const changeProgress = (e: any) => {
@@ -216,7 +218,7 @@ const changeProgress = (e: any) => {
   currentTime.value = Math.floor((e / 100) * durationNum.value);
   console.log(currentTime.value)
   // // 改变audio的实际当前播放时间
-  instance.ctx.$refs.audioPlayer.currentTime = currentTime.value;
+  audioPlayer.value.currentTime = currentTime.value;
 }
 
 // 切歌函数
@@ -280,7 +282,7 @@ const changeVolume = (e: any) => {
   console.log(e)
   // 改变audio的音量
   // input事件 实时触发
-  instance.ctx.$refs.audioPlayer.volume = e / 100;
+  audioPlayer.value.volume = e / 100;
   if (isMuted.value && e > 0) {
     isMuted.value = false;
   } else if (e == 0 && isMuted.value == false) {

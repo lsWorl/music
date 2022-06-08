@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "vue-tsc --noEmit && vite build",
+    "build": "vite build",
     "dev": "vite",
     "preview": "vite preview"
   },
@@ -11,6 +11,7 @@
     "@element-plus/icons-vue": "^1.1.4",
     "axios": "^0.27.2",
     "element-plus": "^2.2.1",
+    "http-proxy-middleware": "^2.0.6",
     "vue": "^3.2.25",
     "vue-router": "^4.0.15",
     "vuex": "^4.0.0"
