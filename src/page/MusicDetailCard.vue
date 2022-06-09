@@ -239,7 +239,7 @@ const closeCard = () => {
   position: fixed;
   width: 86%;
   // height: calc(100vh - 55px);
-  height: calc(80vh + 40px);
+  height: calc(100vh - 110px);
   bottom: 111px;
   left: 14%;
   z-index: 1000;

@@ -257,7 +257,7 @@ const changeMusic = (type: string, id?: any) => {
           : currentIndex + 1;
     } else if (playType.value == "random") {
       if (musicList.value.length == 1) {
-        nextIndex = currentMusicIndex;
+        nextIndex = currentMusicIndex.value;
       } else {
         // Math.floor(Math.random()*10); 可均衡获取0到9的随机整数。
         nextIndex = currentMusicIndex;
