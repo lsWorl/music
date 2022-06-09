@@ -33,7 +33,8 @@ const store = useStore()
 onMounted(()=>{
   //得到网易云账户的cookie
   let cookie = document.cookie.replace(/(?:(?:^|.*;\s*)MUSIC_U\s*\=\s*([^;]*).*$)|^.*$/, "$1")
-  if(cookie != null){
+  console.log(cookie)
+  if(cookie !== ''){
     console.log('已经处于登录状态')
   } else{
     //没有则发送登录请求获取cookie
