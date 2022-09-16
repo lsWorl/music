@@ -1,4 +1,4 @@
-# 仿qq音乐页面web网站（开发中...）
+# 仿qq音乐页面web网站
 
 此项目是基于vue3.2+vite所构建的音乐播放器网站，所调用的后端接口为网易云接口，后端接口地址为[网易云音乐 API](https://netease-cloud-music-api-two-ashy.vercel.app/)，接口部署在我自己的vercel平台中，不想用这个也可以fork原作者[Binaryify/NeteaseCloudMusicApi: 网易云音乐 Node.js API service](https://github.com/Binaryify/NeteaseCloudMusicApi)的项目。
 
